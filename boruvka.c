@@ -1,47 +1,10 @@
 /**
- *
  * Boruvka's Algorithm (computation of the Minimum Spanning Tree).
- *
  * */
 
+#include "boruvka.h"
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-
-/**
- * Data structure to keep track of a graph vertex.
- *
- * Besides keeping data about the vertex, this data structure is the element
- * of the linked list used to keep track of
- * the connected components during the execution of Boruvka's algorithm.
- * We use a linked list to manage the components so that to merge components,
- * represented by vertices `a` and `b`, we only need to set `a->next = b`
- * without having to make copies.
- */
-struct BoruvkaVertex {
-    // the label of the vertex
-    int label;
-    // list of the labels of adjacent vertices
-    struct BoruvkaVertex** adjacent_vertices;
-    // number of adjacent vertices
-    size_t adjacent_vertices_count;
-    // weights of the arrows incident to this vertex
-    // `adjacent_vertex_weights[i]` is the weight of the edge
-    // connecting this vertex to the vertex `adjacent_vertices[i]`
-    int* adjacent_vertex_weights;
-    // pointer to the head of the component list where thisvertex is
-    // currently
-    struct BoruvkaVertex* component_head;
-    // next vertex in the component where this vertex is currently
-    struct BoruvkaVertex* component_next;
-    // indicates whether or not this vertex is the head of some
-    // component
-    bool is_head;
-};
-
-typedef struct BoruvkaVertex BoruvkaVertex;
-typedef BoruvkaVertex** BoruvkaGraph;
-
 
 /**
  * Find the edge of minimal cost that is incident to a component.
@@ -195,95 +158,4 @@ void boruvka (BoruvkaGraph graph, size_t vertex_count) {
     free(component_heads);
     free(found_sources);
     free(found_targets);
-}
-
-int main (int argc, char** argv) {
-    size_t SIZE = 4;
-    BoruvkaVertex* a = malloc(sizeof(BoruvkaVertex));
-    BoruvkaVertex* b = malloc(sizeof(BoruvkaVertex));
-    BoruvkaVertex* c = malloc(sizeof(BoruvkaVertex));
-    BoruvkaVertex* d = malloc(sizeof(BoruvkaVertex));
-
-    /**
-     * Initialize the simple graph:
-     *        1
-     *    0 ----- 1
-     *    |       |
-     *  3 |       | 2
-     *    |       |
-     *    3 ----- 2
-     *        1
-     * */
-
-    a->label = 0;
-    a->adjacent_vertices_count = 2;
-    a->adjacent_vertices =
-        malloc(a->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    a->adjacent_vertex_weights =
-        malloc(a->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    a->adjacent_vertices[0] = b;
-    a->adjacent_vertex_weights[0] = 1;
-    a->adjacent_vertices[1] = d;
-    a->adjacent_vertex_weights[1] = 3;
-
-    b->label = 1;
-    b->adjacent_vertices_count = 2;
-    b->adjacent_vertices =
-        malloc(b->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    b->adjacent_vertex_weights =
-        malloc(b->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    b->adjacent_vertices[0] = a;
-    b->adjacent_vertex_weights[0] = 1;
-    b->adjacent_vertices[1] = c;
-    b->adjacent_vertex_weights[1] = 2;
-
-    c->label = 2;
-    c->adjacent_vertices_count = 2;
-    c->adjacent_vertices =
-        malloc(c->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    c->adjacent_vertex_weights =
-        malloc(d->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    c->adjacent_vertices[0] = b;
-    c->adjacent_vertex_weights[0] = 2;
-    c->adjacent_vertices[1] = d;
-    c->adjacent_vertex_weights[1] = 1;
-
-    d->label = 3;
-    d->adjacent_vertices_count = 2;
-    d->adjacent_vertices =
-        malloc(d->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    d->adjacent_vertex_weights =
-        malloc(d->adjacent_vertices_count*sizeof(BoruvkaVertex*));
-    d->adjacent_vertices[0] = c;
-    d->adjacent_vertex_weights[0] = 1;
-    d->adjacent_vertices[1] = a;
-    d->adjacent_vertex_weights[1] = 3;
-
-    BoruvkaGraph graph = malloc(SIZE*sizeof(BoruvkaVertex*));
-    graph[0] = a;
-    graph[1] = b;
-    graph[2] = c;
-    graph[3] = d;
-
-    boruvka(graph, SIZE);
-
-    free(a->adjacent_vertices);
-    free(a->adjacent_vertex_weights);
-    free(a);
-
-    free(b->adjacent_vertices);
-    free(b->adjacent_vertex_weights);
-    free(b);
-
-    free(c->adjacent_vertices);
-    free(c->adjacent_vertex_weights);
-    free(c);
-
-    free(d->adjacent_vertices);
-    free(d->adjacent_vertex_weights);
-    free(d);
-
-    free(graph);
-
-    return 0;
 }
