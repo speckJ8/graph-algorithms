@@ -1,2 +1,4 @@
 def Settings(**kwargs):
-    return {}
+    return {
+        "flags": [],
+    }
