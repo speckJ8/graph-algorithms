@@ -1,4 +1,4 @@
-def Settings(**kwargs):
+def FlagsForFile(filename, **kwargs):
     return {
-        "flags": [],
+        "flags": ["-Wall"],
     }
