@@ -11,6 +11,8 @@ add_library(Gabow gabow.c)
 
 target_link_libraries(RBTree BinaryTree)
 
+##############################################################################
+
 enable_testing()
 
 include(FetchContent)
@@ -26,3 +28,10 @@ target_link_libraries(RBTreeTest RBTree gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(RBTreeTest)
+
+##############################################################################
+
+enable_language(CUDA)
+
+add_executable(BoruvkaGpu boruvka.cu)
+set_property(TARGET BoruvkaGpu PROPERTY CUDA_ARCHITECTURES "61")
